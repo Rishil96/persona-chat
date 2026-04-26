@@ -1,9 +1,9 @@
 from typing import Annotated, List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
 from app.db.models import Conversation
-from app.schemas.conversations import ConversationListItemSchema
+from app.schemas.conversations import ConversationListItemSchema, ConversationSchema
 
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
@@ -28,3 +28,14 @@ def get_conversations(db: Annotated[Session, Depends(get_db)]):
     """
     all_conversations = db.query(Conversation).all()
     return all_conversations
+
+
+@router.get("/{conversation_id}", response_model=ConversationSchema, status_code=200)
+def get_conversation(conversation_id: str, db: Annotated[Session, Depends(get_db)]):
+    """
+    Route to get a conversation using its id
+    """
+    conversation = db.query(Conversation).filter(Conversation.conversation_id == conversation_id).first()
+    if not conversation:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    return conversation
