@@ -39,3 +39,16 @@ def get_conversation(conversation_id: str, db: Annotated[Session, Depends(get_db
     if not conversation:
         raise HTTPException(status_code=404, detail="Conversation not found")
     return conversation
+
+
+@router.delete("/{conversation_id}", status_code=204)
+def delete_conversation(conversation_id: str, db: Annotated[Session, Depends(get_db)]):
+    """
+    Route to delete a conversation using its id
+    """
+    conversation = db.query(Conversation).filter(Conversation.conversation_id == conversation_id).first()
+    if not conversation:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    db.delete(conversation)
+    db.commit()
+    return
