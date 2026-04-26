@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
@@ -19,3 +19,12 @@ def create_conversation(db: Annotated[Session, Depends(get_db)]):
     db.commit()
     db.refresh(new_conversation)
     return new_conversation
+
+
+@router.get("/", response_model=List[ConversationListItemSchema], status_code=200)
+def get_conversations(db: Annotated[Session, Depends(get_db)]):
+    """
+    Route to get all conversations
+    """
+    all_conversations = db.query(Conversation).all()
+    return all_conversations
