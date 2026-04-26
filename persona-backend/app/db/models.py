@@ -1,15 +1,9 @@
 import uuid
 from datetime import datetime, UTC
-from enum import Enum as PyEnum
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import Text, ForeignKey, DateTime, Enum
 from app.db.database import Base
-
-
-# Role
-class Role(PyEnum):
-    USER = "user"
-    ASSISTANT = "assistant"
+from app.enums import Role
 
 
 # Conversation table schema
