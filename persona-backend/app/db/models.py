@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, UTC
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from sqlalchemy import Text, ForeignKey, DateTime, Enum
+from sqlalchemy import Text, ForeignKey, DateTime, Enum, String
 from app.db.database import Base
 from app.enums import Role
 
@@ -10,6 +10,7 @@ from app.enums import Role
 class Conversation(Base):
     __tablename__ = 'conversations'
     id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(String, nullable=True)
     conversation_id: Mapped[str] = mapped_column(Text, unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
     messages = relationship("Message", cascade="all, delete-orphan")
 
