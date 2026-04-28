@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from langchain_core.language_models import BaseChatModel
 
 
 class LLMProvider(ABC):
@@ -7,5 +8,5 @@ class LLMProvider(ABC):
         self.model_name = model_name
 
     @abstractmethod
-    def get_llm_instance(self):
+    def get_llm_instance(self) -> BaseChatModel:
         pass
