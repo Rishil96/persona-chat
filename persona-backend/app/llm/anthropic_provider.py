@@ -1,15 +1,15 @@
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from app.llm.base import LLMProvider
 
 
-class OpenAIProvider(LLMProvider):
+class AnthropicProvider(LLMProvider):
 
     def __init__(self, model_name: str):
         super().__init__(model_name)
 
     def get_llm_instance(self):
         """
-        Return an OpenAI LLM instance
+        Returns an Anthropic LLM instance
         """
-        llm = ChatOpenAI(model=self.model_name)
+        llm = ChatAnthropic(model=self.model_name)
         return llm
