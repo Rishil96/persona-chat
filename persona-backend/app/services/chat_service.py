@@ -26,7 +26,7 @@ def send_message(conversation_id: str, user_message: str, model_name: str, db: S
     llm_response = llm_instance.invoke(conversation_history)
     # Step 4: Make database entry for the latest message
     user_message_obj = Message(conversation_id=conversation.id, role=Role.USER, content=user_message)
-    ai_message_obj = Message(conversation_id=conversation.id, role=Role.ASSISTANT, content=llm_response.content)
+    ai_message_obj = Message(conversation_id=conversation.id, role=Role.ASSISTANT, model=model_name, content=llm_response.content)
     db.add(user_message_obj)
     db.add(ai_message_obj)
     db.commit()
