@@ -30,6 +30,10 @@ def send_message(conversation_id: str, user_message: str, model_name: str, db: S
     db.add(user_message_obj)
     db.add(ai_message_obj)
     db.commit()
+    db.refresh(conversation)
+    # Step 5: Generate a title for the conversation
+    if conversation.title is None and len(conversation.messages) > 0:
+        update_conversation_title(title=None, conversation=conversation, db=db)
     return llm_response.content
 
 
