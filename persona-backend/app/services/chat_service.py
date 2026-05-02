@@ -2,9 +2,11 @@ from typing import List
 from fastapi import status, HTTPException
 from langchain_core.messages import AIMessage, HumanMessage
 from sqlalchemy.orm import Session
+from app.constants import DEFAULT_LLM
 from app.enums import Role
 from app.db.models import Conversation, Message
 from app.llm.registry import get_llm_instance
+from app.schemas.conversations import ConversationTitleSchema
 
 
 def send_message(conversation_id: str, user_message: str, model_name: str, db: Session):
@@ -42,3 +44,26 @@ def format_messages(messages: List[Message]) -> List[AIMessage | HumanMessage]:
         elif message.role == Role.ASSISTANT:
             formatted_messages.append(AIMessage(message.content))
     return formatted_messages
+
+
+def update_conversation_title(title: str | None, conversation: Conversation, db: Session):
+    """
+    Utility function to generate a conversation title or accept it from user
+    """
+    # Step 1: Update title if passed as input
+    if title:
+        conversation.title = title
+        db.commit()
+        db.refresh(conversation)
+        return conversation.title
+    # Step 2: Generate title using LLM
+    llm_instance = get_llm_instance(model_name=DEFAULT_LLM)
+    llm_structured = llm_instance.with_structured_output(ConversationTitleSchema)
+    conversation_history = format_messages(conversation.messages[:2])
+    conversation_history.append(HumanMessage("Generate a 5-10 word title for the conversation based on above history."))
+    llm_response = llm_structured.invoke(conversation_history)
+    # Step 3: Update title in database
+    conversation.title = llm_response.title
+    db.commit()
+    db.refresh(conversation)
+    return conversation.title
