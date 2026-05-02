@@ -13,9 +13,14 @@ class MessageSchema(BaseModel):
 
 class ConversationSchema(BaseModel):
     conversation_id: str = Field(..., description="Unique conversation identifier")
+    title: Optional[str] = Field(description="Conversation title", default=None)
     messages: List[MessageSchema] = Field(..., description="List of messages in this conversation")
 
 
 class ConversationListItemSchema(BaseModel):
     conversation_id: str = Field(..., description="Conversation identifier")
     title: Optional[str] = Field(description="Conversation title", default=None)
+
+
+class ConversationTitleSchema(BaseModel):
+    title: str = Field(..., description="Conversation title of 5-10 words")
