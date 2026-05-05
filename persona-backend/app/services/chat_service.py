@@ -6,7 +6,11 @@ from app.constants import DEFAULT_LLM
 from app.enums import Role
 from app.db.models import Conversation, Message
 from app.llm.registry import get_llm_instance
+from app.logger import get_logger
 from app.schemas.conversations import ConversationTitleSchema
+
+# Setup logger
+logger = get_logger()
 
 
 def send_message(conversation_id: str, user_message: str, model_name: str, db: Session):
@@ -16,6 +20,7 @@ def send_message(conversation_id: str, user_message: str, model_name: str, db: S
     # Step 1: Retrieve conversation using UUID and raise exception in case of conversation not found
     conversation = db.query(Conversation).filter(Conversation.conversation_id == conversation_id).first()
     if not conversation:
+        logger.error(f"Conversation ID: {conversation_id} does not exist")
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Conversation not found")
     # Step 2: Structure messages into Langchain acceptable format
     all_messages = conversation.messages
@@ -33,6 +38,7 @@ def send_message(conversation_id: str, user_message: str, model_name: str, db: S
     db.refresh(conversation)
     # Step 5: Generate a title for the conversation
     if conversation.title is None and len(conversation.messages) > 0:
+        logger.info("Generating conversation title using the initial interaction between user and assistant.")
         update_conversation_title(title=None, conversation=conversation, db=db)
     return llm_response.content
 
