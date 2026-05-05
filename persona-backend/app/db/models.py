@@ -21,5 +21,6 @@ class Message(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     conversation_id: Mapped[int] = mapped_column(ForeignKey('conversations.id'), nullable=False)
     role: Mapped[Role] = mapped_column(Enum(Role), nullable=False)
+    model: Mapped[str] = mapped_column(String, nullable=True)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=lambda: datetime.now(UTC))

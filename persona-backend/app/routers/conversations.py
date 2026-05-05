@@ -4,9 +4,11 @@ from sqlalchemy.orm import Session
 from app.db.deps import get_db
 from app.db.models import Conversation
 from app.schemas.conversations import ConversationListItemSchema, ConversationSchema
+from app.logger import get_logger
 
 
 router = APIRouter(prefix="/conversations", tags=["conversations"])
+logger = get_logger()
 
 
 @router.post("/", response_model=ConversationListItemSchema, status_code=201)
@@ -18,6 +20,7 @@ def create_conversation(db: Annotated[Session, Depends(get_db)]):
     db.add(new_conversation)
     db.commit()
     db.refresh(new_conversation)
+    logger.info(f"Created new conversation: {new_conversation.conversation_id}")
     return new_conversation
 
 
@@ -37,6 +40,7 @@ def get_conversation(conversation_id: str, db: Annotated[Session, Depends(get_db
     """
     conversation = db.query(Conversation).filter(Conversation.conversation_id == conversation_id).first()
     if not conversation:
+        logger.error(f"Conversation ID: {conversation_id} not found")
         raise HTTPException(status_code=404, detail="Conversation not found")
     return conversation
 
@@ -48,7 +52,9 @@ def delete_conversation(conversation_id: str, db: Annotated[Session, Depends(get
     """
     conversation = db.query(Conversation).filter(Conversation.conversation_id == conversation_id).first()
     if not conversation:
+        logger.error(f"Conversation ID: {conversation_id} not found")
         raise HTTPException(status_code=404, detail="Conversation not found")
     db.delete(conversation)
     db.commit()
+    logger.info(f"Deleted conversation: {conversation.conversation_id}")
     return
