@@ -4,9 +4,14 @@ function App() {
 
   return (
     <>
-      <h1 className="text-3xl text-blue-500">
-        Persona Chat
-      </h1>
+      <div className="flex h-screen">
+        <div className="w-64 bg-gray-800">
+          Sidebar Placeholder
+        </div>
+        <div className="flex-1 bg-gray-100">
+          Chat Window Placeholder
+        </div>
+      </div>
     </>
   )
 }
