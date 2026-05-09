@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.db.database import Base, get_engine, get_session
 from app.logger import get_logger
 from app.routers.conversations import router as conversation_router
@@ -21,6 +22,15 @@ app = FastAPI(title="Persona")
 app.include_router(conversation_router)
 app.include_router(chat_router)
 
+# Setup Middleware
+origins = ["http://localhost:5173"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True,
+)
 
 @app.get("/health")
 def health():
