@@ -1,4 +1,17 @@
+import { useState, useEffect } from "react"
+import { getConversations } from "../services/Api.js"
+
 function Sidebar() {
+    // State variables to get conversations from backend
+    const [conversations, setConversations] = useState([])
+    
+    useEffect(() => {
+        async function fetchConversations() {
+            const conversationsList = await getConversations();
+            setConversations(conversationsList);
+        }
+        fetchConversations();
+    }, [])
     return (
         <div className="h-full w-full text-gray-100 bg-gray-900 p-4">
             <div>
@@ -8,9 +21,11 @@ function Sidebar() {
             </div>
             <div className="mt-4">
                 <ul>
-                    <li className="px-3 py-2 rounded-lg hover:bg-gray-700 cursor-pointer">Conversation 1</li>
-                    <li className="px-3 py-2 rounded-lg hover:bg-gray-700 cursor-pointer">Conversation 2</li>
-                    <li className="px-3 py-2 rounded-lg hover:bg-gray-700 cursor-pointer">Conversation 3</li>
+                    {
+                        conversations.map(conv => (
+                            <li key={conv.conversation_id} className="px-3 py-2 rounded-lg hover:bg-gray-700 cursor-pointer">{conv.title}</li>
+                        ))
+                    }
                 </ul>
             </div>
         </div>
