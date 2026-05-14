@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { getConversations } from "../services/Api.js"
 
-function Sidebar() {
+function Sidebar({ onSelectConversation }) {
     // State variables to get conversations from backend
     const [conversations, setConversations] = useState([])
     
@@ -23,7 +23,7 @@ function Sidebar() {
                 <ul>
                     {
                         conversations.map(conv => (
-                            <li key={conv.conversation_id} className="px-3 py-2 rounded-lg hover:bg-gray-700 cursor-pointer">{conv.title}</li>
+                            <li key={conv.conversation_id} onClick={() => onSelectConversation(conv.conversation_id)} className="px-3 py-2 rounded-lg hover:bg-gray-700 cursor-pointer">{conv.title}</li>
                         ))
                     }
                 </ul>
