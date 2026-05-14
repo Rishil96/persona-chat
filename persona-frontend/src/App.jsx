@@ -1,5 +1,6 @@
 import './App.css'
 import Sidebar from './components/Sidebar.jsx'
+import ChatWindow from './components/ChatWindow.jsx'
 import { useState } from 'react'
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
 				<Sidebar onSelectConversation={setConversationID} />
 			</div>
 			<div className="flex-1 bg-gray-50">
-				Chat Window Placeholder
+				<ChatWindow conversationID={conversationID}/>
 			</div>
 		</div>
 	)
