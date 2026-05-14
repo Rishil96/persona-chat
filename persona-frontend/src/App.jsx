@@ -10,7 +10,7 @@ function App() {
 			<div className="w-64 bg-gray-900">
 				<Sidebar onSelectConversation={setConversationID} />
 			</div>
-			<div className="flex-1 bg-gray-50">
+			<div className="flex-1 bg-gray-200">
 				<ChatWindow conversationID={conversationID}/>
 			</div>
 		</div>
