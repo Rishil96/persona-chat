@@ -25,3 +25,5 @@ function MessageInput({ conversationID, onMessageSent }) {
         </div>
     )
 }
+
+export default MessageInput
