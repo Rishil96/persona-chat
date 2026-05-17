@@ -21,8 +21,8 @@ function ChatWindow({ conversationID }) {
     }
 
     return (
-        <>
-            <div className="h-full overflow-y-auto">
+        <div className="flex flex-col h-full">
+            <div className="flex-1 overflow-y-auto">
                 {
                     conversation.map(message => (
                         
@@ -35,7 +35,7 @@ function ChatWindow({ conversationID }) {
             <div>
                 <MessageInput conversationID={conversationID} onMessageSent={handleMessageSent}/>
             </div>
-        </>
+        </div>
     )
 }
 
