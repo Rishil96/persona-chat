@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { getConversation } from "../services/Api";
 import MessageInput from "../components/MessageInput"
 
-function ChatWindow({ conversationID }) {
+function ChatWindow({ conversationID, setConversationID }) {
 
     const [conversation, setConversation] = useState([]);
 
@@ -18,9 +18,21 @@ function ChatWindow({ conversationID }) {
         fetchConversation();
     }, [conversationID])
 
-    async function handleMessageSent() {
-        const conversationDetails = await getConversation(conversationID);
+    async function handleMessageSent(activeConversationID) {
+        const id = activeConversationID || conversationID
+        const conversationDetails = await getConversation(id);
         setConversation(conversationDetails.messages)
+    }
+
+    if (!conversationID) {
+        return <div className="flex flex-col items-center justify-center h-full text-gray-400">
+            <p className="text-xl">
+                Select a conversation or start a new one!
+            </p>
+            <div>
+                <MessageInput conversationID={null} onMessageSent={handleMessageSent} setConversationID={setConversationID}/>
+            </div>
+        </div>
     }
 
     return (
@@ -36,7 +48,7 @@ function ChatWindow({ conversationID }) {
                 }
             </div>
             <div>
-                <MessageInput conversationID={conversationID} onMessageSent={handleMessageSent}/>
+                <MessageInput conversationID={conversationID} onMessageSent={handleMessageSent} setConversationID={setConversationID}/>
             </div>
         </div>
     )
