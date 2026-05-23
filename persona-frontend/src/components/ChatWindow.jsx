@@ -8,7 +8,10 @@ function ChatWindow({ conversationID }) {
 
     useEffect(() => {
         async function fetchConversation() {
-            if (!conversationID) return ;
+            if (!conversationID) {
+                setConversation([]);
+                return ;
+            }
             const conversationDetails = await getConversation(conversationID);
             setConversation(conversationDetails.messages)
         }
