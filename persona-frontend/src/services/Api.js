@@ -29,3 +29,16 @@ export async function sendMessage(conversationID, userMessage, modelName) {
     const data = await response.json();
     return data;
 }
+
+export async function createConversation() {
+    const response = await fetch("http://localhost:8000/conversations/",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    )
+    const data = await response.json();
+    return data.conversation_id;
+}
