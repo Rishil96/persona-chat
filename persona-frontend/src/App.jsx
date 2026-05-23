@@ -11,7 +11,7 @@ function App() {
 				<Sidebar onSelectConversation={setConversationID} />
 			</div>
 			<div className="flex-1 bg-gray-200 overflow-hidden">
-				<ChatWindow conversationID={conversationID}/>
+				<ChatWindow conversationID={conversationID} setConversationID={setConversationID}/>
 			</div>
 		</div>
 	)
