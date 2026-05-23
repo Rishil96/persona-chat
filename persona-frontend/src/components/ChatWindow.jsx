@@ -25,14 +25,18 @@ function ChatWindow({ conversationID, setConversationID }) {
     }
 
     if (!conversationID) {
-        return <div className="flex flex-col items-center justify-center h-full text-gray-400">
-            <p className="text-xl">
-                Select a conversation or start a new one!
-            </p>
-            <div>
-                <MessageInput conversationID={null} onMessageSent={handleMessageSent} setConversationID={setConversationID}/>
+        return (
+            <div className="flex flex-col h-full">
+                <div className="flex-1 flex items-center justify-center text-gray-400">
+                    <p className="text-xl">
+                        Select a conversation or start a new one!
+                    </p>
+                </div>
+                <div>
+                    <MessageInput conversationID={null} onMessageSent={handleMessageSent} setConversationID={setConversationID}/>
+                </div>
             </div>
-        </div>
+        )
     }
 
     return (
