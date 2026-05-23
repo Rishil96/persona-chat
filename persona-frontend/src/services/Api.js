@@ -42,3 +42,14 @@ export async function createConversation() {
     const data = await response.json();
     return data.conversation_id;
 }
+
+export async function deleteConversation(conversationID) {
+    const response = await fetch(`http://localhost:8000/conversations/${conversationID}`,
+        {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    );
+}
