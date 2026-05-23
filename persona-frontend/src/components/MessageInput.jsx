@@ -1,14 +1,19 @@
 import { useState } from "react";
-import { sendMessage } from "../services/Api";
+import { sendMessage, createConversation } from "../services/Api";
 
-function MessageInput({ conversationID, onMessageSent }) {
+function MessageInput({ conversationID, onMessageSent, setConversationID }) {
     
     const [message, setMessage] = useState("")
     const [model, setModel] = useState("gpt-4o")
 
     async function handleSend() {
-        const data = await sendMessage(conversationID, message, model);
-        onMessageSent();
+        let activeConversationID = conversationID;
+        if (!conversationID) {
+            activeConversationID = await createConversation();
+            setConversationID(activeConversationID);
+        }
+        await sendMessage(activeConversationID, message, model);
+        onMessageSent(activeConversationID);
         setMessage("");
     }
 
